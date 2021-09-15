@@ -8,8 +8,7 @@ import { getCourseInfo } from "../../utils/course"
 
 let useClickOutside = (handler) => {
   let domNode = useRef();
-  console.log(domNode)
-
+  
   useEffect(() => {
     let maybeHandler = (event) => {
       if (domNode.current && !domNode.current.contains(event.target)) {
