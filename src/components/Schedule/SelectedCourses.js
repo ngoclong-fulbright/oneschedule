@@ -28,31 +28,31 @@ let useClickOutside = (handler) => {
 };
 
 const ColorPicker = ({courseId}) => {
-  const [changing, setChanging] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const color = useSelector(state => state.selectedCourses.value
     .filter(course => course.id === courseId)[0].color)
   const dispatch = useDispatch()
 
   const changeColor = (color) => {
     dispatch(setColor({id: courseId, color: color.hex}))   
-    setChanging(false)
+    setIsOpen(false)
   }
 
   let domNode = useClickOutside(() => {
-    setChanging(false);
+    setIsOpen(false);
   });
     
   return (
     <div ref={domNode} className='modifier me-2'>
       <div className='color-btn modifier rounded'
         onClick={() => {
-          setChanging(!changing)
+          setIsOpen(!isOpen)
         }}
         style={({backgroundColor: color})}
       >
       </div>
       <div className='color-picker position-relative'>
-        {changing 
+        {isOpen 
         ? 
           <TwitterPicker
             colors={COLORS}
