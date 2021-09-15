@@ -1,11 +1,31 @@
 import { TwitterPicker } from "react-color"
 import COLORS from '../../data/colors.json'
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
 import { setColor, toggleSelection, toggleVisibility } from "../../store/selectedCoursesSlice"
 import { getCourseInfo } from "../../utils/course"
 
+let useClickOutside = (handler) => {
+  let domNode = useRef();
+  console.log(domNode)
+
+  useEffect(() => {
+    let maybeHandler = (event) => {
+      if (domNode.current && !domNode.current.contains(event.target)) {
+        handler();
+      }
+    };
+
+    document.addEventListener("mousedown", maybeHandler);
+
+    return () => {
+      document.removeEventListener("mousedown", maybeHandler);
+    };
+  });
+
+  return domNode;
+};
 
 const ColorPicker = ({courseId}) => {
   const [changing, setChanging] = useState(false)
@@ -18,8 +38,12 @@ const ColorPicker = ({courseId}) => {
     setChanging(false)
   }
 
+  let domNode = useClickOutside(() => {
+    setChanging(false);
+  });
+    
   return (
-    <div className='modifier me-2'>
+    <div ref={domNode} className='modifier me-2'>
       <div className='color-btn modifier rounded'
         onClick={() => {
           setChanging(!changing)
